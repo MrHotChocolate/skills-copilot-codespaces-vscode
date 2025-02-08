@@ -1,0 +1,105 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const startBtn = document.getElementById("start-btn");
+    const usernameInput = document.getElementById("username");
+    const quizSection = document.getElementById("quiz-section");
+    const usernameSection = document.getElementById("username-section");
+    const questionTitle = document.getElementById("question-title");
+    const answerButtons = document.getElementById("answer-buttons");
+    const feedback = document.getElementById("feedback");
+    const timer = document.getElementById("time-left");
+    const nextBtn = document.getElementById("next-btn");
+    const skipBtn = document.getElementById("skip-btn");
+    const finalScore = document.getElementById("final-score");
+    const scoreSection = document.getElementById("score-section");
+    const restartBtn = document.getElementById("restart-btn");
+
+    let questions = [
+        { question: "What is the capital of France?", answers: ["Berlin", "Madrid", "Paris", "Rome"], correct: "Paris" },
+        { question: "Who wrote 'To Kill a Mockingbird'?", answers: ["Harper Lee", "Mark Twain", "Ernest Hemingway", "Jane Austen"], correct: "Harper Lee" },
+        { question: "What is the chemical symbol for gold?", answers: ["Ag", "Au", "Pb", "Fe"], correct: "Au" },
+        { question: "Which planet is known as the Red Planet?", answers: ["Venus", "Saturn", "Mars", "Jupiter"], correct: "Mars" },
+        { question: "Who painted the Mona Lisa?", answers: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"], correct: "Leonardo da Vinci" },
+        { question: "Which element is essential for respiration?", answers: ["Oxygen", "Carbon", "Nitrogen", "Hydrogen"], correct: "Oxygen" },
+        { question: "How many continents are there on Earth?", answers: ["5", "6", "7", "8"], correct: "7" },
+        { question: "What is the speed of light?", answers: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], correct: "300,000 km/s" },
+        { question: "Who discovered gravity?", answers: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"], correct: "Isaac Newton" }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let countdown;
+
+    startBtn.addEventListener("click", () => {
+        if (usernameInput.value.trim() === "") {
+            alert("Please enter a username.");
+            return;
+        }
+        usernameSection.style.display = "none";
+        quizSection.style.display = "block";
+        showQuestion();
+    });
+
+    function showQuestion() {
+        clearInterval(countdown);
+        timer.innerText = "15";
+        let timeLeft = 15;
+        countdown = setInterval(() => {
+            timeLeft--;
+            timer.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                nextQuestion();
+            }
+        }, 1000);
+
+        let question = questions[currentQuestionIndex];
+        questionTitle.innerText = question.question;
+        answerButtons.innerHTML = "";
+        question.answers.forEach(answer => {
+            let button = document.createElement("button");
+            button.innerText = answer;
+            button.classList.add("btn");
+            button.addEventListener("click", () => checkAnswer(answer));
+            answerButtons.appendChild(button);
+        });
+    }
+
+    function checkAnswer(answer) {
+        clearInterval(countdown);
+        let correctAnswer = questions[currentQuestionIndex].correct;
+        if (answer === correctAnswer) {
+            score++;
+            feedback.innerText = "Correct!";
+            feedback.style.color = "green";
+        } else {
+            feedback.innerText = "Wrong! The correct answer was " + correctAnswer;
+            feedback.style.color = "red";
+        }
+        nextBtn.style.display = "block";
+    }
+
+    nextBtn.addEventListener("click", nextQuestion);
+    skipBtn.addEventListener("click", nextQuestion);
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            feedback.innerText = "";
+            nextBtn.style.display = "none";
+            showQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        quizSection.style.display = "none";
+        scoreSection.style.display = "block";
+        finalScore.innerText = `You scored ${score} out of ${questions.length}`;
+        localStorage.setItem("lastScore", score);
+    }
+
+    restartBtn.addEventListener("click", () => {
+        location.reload();
+    });
+});
