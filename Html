@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Interactive Knowledge Quiz</h1>
+    </header>
+
+    <main>
+        <!-- Username Section -->
+        <section id="username-section">
+            <h2>Enter Your Username</h2>
+            <input type="text" id="username" placeholder="Your name..." required>
+            <button id="start-btn">Start Quiz</button>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz-section" class="hidden">
+            <h2 id="question-title"></h2>
+            <div id="answer-buttons"></div>
+            <p id="feedback"></p>
+            <p>Time Left: <span id="time-left">15</span> sec</p>
+            <button id="next-btn" class="hidden">Next Question</button>
+            <button id="skip-btn" class="hidden">Skip Question</button>
+        </section>
+
+        <!-- Score Section -->
+        <section id="score-section" class="hidden">
+            <h2>Quiz Completed!</h2>
+            <p id="final-score"></p>
+            <button id="restart-btn">Restart Quiz</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Interactive Quiz. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
